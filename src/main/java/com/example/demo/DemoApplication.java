@@ -5,7 +5,6 @@ import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.springframework.boot.CommandLineRunner;
@@ -97,10 +96,7 @@ class ClientConfiguration {
 }
 
 @RestController
-@RequiredArgsConstructor
-class MessageRestController {
-
-  private final RSocketRequester rSocketRequester;
+record MessageRestController(RSocketRequester rSocketRequester) {
 
   @GetMapping(value = "/message/{origin}/{interaction}")
   public Publisher<Message> message(@PathVariable String origin,
