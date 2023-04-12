@@ -5,7 +5,9 @@ import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.reactivestreams.Publisher;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +17,9 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MimeTypeUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.util.retry.Retry;
 
 @SpringBootApplication
@@ -91,20 +96,18 @@ class ClientConfiguration {
   }
 }
 
-//@RestController
-//class MessageRestController {
-//
-//  private final RSocketRequester rSocketRequester;
-//
-//  public MessageRestController(RSocketRequester rSocketRequester) {
-//    this.rSocketRequester = rSocketRequester;
-//  }
-//
-//  @GetMapping(value = "/message")
-//  public Publisher<Message> message() {
-//    return rSocketRequester
-//        .route("request-response")
-//        .data(new Message("test", "testtoo"))
-//        .retrieveMono(Message.class);
-//  }
-//}
+@RestController
+@RequiredArgsConstructor
+class MessageRestController {
+
+  private final RSocketRequester rSocketRequester;
+
+  @GetMapping(value = "/message/{origin}/{interaction}")
+  public Publisher<Message> message(@PathVariable String origin,
+      @PathVariable String interaction) {
+    return rSocketRequester
+        .route("request-response")
+        .data(new Message(origin, interaction))
+        .retrieveMono(Message.class);
+  }
+}
