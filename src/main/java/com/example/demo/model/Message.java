@@ -1,12 +1,10 @@
 package com.example.demo.model;
 
 import java.time.Instant;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Message {
 
@@ -19,11 +17,5 @@ public class Message {
     this.origin = origin;
     this.interaction = interaction;
     this.index = 0;
-  }
-
-  public Message(String origin, String interaction, long index) {
-    this.origin = origin;
-    this.interaction = interaction;
-    this.index = index;
   }
 }
